@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Endpoint</title>
+</head>
+<body>
+<h1>Enter Endpoint</h1>
+<form action="/grpcui" method="get">
+    <label for="endpoint">Endpoint:</label>
+    <input type="text" name="endpoint" required>
+    <br>
+    <button type="submit">Start GRPCUI</button>
+</form>
+{{ if .error }}
+<p>{{ .error }}</p>
+{{ end }}
+</body>
+</html>

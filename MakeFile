@@ -1,0 +1,10 @@
+build:
+	go build -o grpcui-proxy
+
+run:
+	grcpui-proxy -port 8080
+
+build-docker:
+	docker build -t grpcui-proxy .
+
+.PHONY: run build build-docker
