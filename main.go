@@ -50,8 +50,6 @@ func grpcuiHandler(c *gin.Context) {
 		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": "endpoint is required"})
 		return
 	}
-	// set endpoint cookie
-	c.SetCookie("grpcui_endpoint", endpoint, 3600, "/", "", false, true)
 	option, err := NewGrpcuiProxyOption(c, endpoint)
 	if err != nil {
 		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": err.Error()})
@@ -75,14 +73,14 @@ func grpcuiHandler(c *gin.Context) {
 
 // invokeHandler is the handler for the invoke rpc call
 func invokeHandler(c *gin.Context) {
-	endpoint, err := c.Cookie("grpcui_endpoint")
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": "endpoint is required"})
+	endpoint := c.Query("endpoint")
+	if endpoint == "" {
+		c.HTML(http.StatusBadRequest, "index-template.html", gin.H{"error": "endpoint is required"})
 		return
 	}
 	option, err := NewGrpcuiProxyOption(c, endpoint)
 	if err != nil {
-		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": err.Error()})
+		c.HTML(http.StatusBadRequest, "index-template.html", gin.H{"error": err.Error()})
 		return
 	}
 	defer option.cc.Close()
@@ -95,15 +93,14 @@ func invokeHandler(c *gin.Context) {
 
 // metadataHandler is the handler for the metadata page
 func metadataHandler(c *gin.Context) {
-	// get endpoint from cookie
-	endpoint, err := c.Cookie("grpcui_endpoint")
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": "endpoint is required"})
+	endpoint := c.Query("endpoint")
+	if endpoint == "" {
+		c.HTML(http.StatusBadRequest, "index-template.html", gin.H{"error": "endpoint is required"})
 		return
 	}
 	option, err := NewGrpcuiProxyOption(c, endpoint)
 	if err != nil {
-		c.HTML(http.StatusBadRequest, "index.html", gin.H{"error": err.Error()})
+		c.HTML(http.StatusBadRequest, "index-template.html", gin.H{"error": err.Error()})
 		return
 	}
 	defer option.cc.Close()

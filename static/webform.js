@@ -38,7 +38,7 @@ window.initGRPCForm = function(services, svcDescs, mtdDescs, invokeURI, metadata
         // disable the invoke button until we get the schema
         resetInvoke(false);
 
-        $.ajax(metadataURI + "?method=" + fullMethod)
+        $.ajax(metadataURI + "?method=" + fullMethod + "&endpoint=" + target)
             .done(function(data) {
                 buildRequestForm(data);
                 callback?.();
@@ -2240,7 +2240,7 @@ window.initGRPCForm = function(services, svcDescs, mtdDescs, invokeURI, metadata
         $.ajax(
             {
                 type: "POST",
-                url: invokeURI + "/" + service + "." + method,
+                url: invokeURI + "/" + service + "." + method + "?endpoint=" + target,
                 contentType: "application/json",
                 data: JSON.stringify({timeout_seconds: timeout, metadata: metadata, data: data}),
             })
